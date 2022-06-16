@@ -10,6 +10,14 @@
             border:10px solid green;
             background-color:#f1f1f1;
         }
+        #clickme{
+            border-radius: 25%;
+            width: 100px;
+            height: 35px;
+            font-size: 17px;
+            margin-left: 150px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body onload="startGame()" onkeydown="keydownHandler(event)" onkeyup="keyupHandler(event)" onmousedown="accelerate(-0.2)" onmouseup=" accelerate(0.05)">
@@ -18,23 +26,42 @@
 var myGamePiece;
 var myObstacles = [];
 var myScore;
+var size = 480;
+var pieceSize = 30;
+var scoreSize = "30px";
+var comSize = 10;
+var posScore = 280;
 
 function startGame() {
+    if(screen.width<600){
+        size=400;
+        pieceSize=25;
+        scoreSize="25px";
+        comSize = 8;
+        posScore = 230;
+    }
+    else if(screen.width>1300){
+        size=550;
+        pieceSize=32;
+        scoreSize="32px";
+        comSize = 11;
+        posScore = 350;
+    }
     myGameArea.ready();
-    var my_gradient = myGameArea.context.createLinearGradient(0, 0, 0, 480);
+    var my_gradient = myGameArea.context.createLinearGradient(0, 0, 0, size);
     my_gradient.addColorStop(0, "white");
     my_gradient.addColorStop(1, "red");
-    myGamePiece = new component(30, 30, my_gradient, 10, 120);
+    myGamePiece = new component(pieceSize, pieceSize, my_gradient, 10, 120);
     myGamePiece.gravity = 0.05;
-    myScore = new component("30px", "Consolas", "black", 280, 40, "text");
+    myScore = new component(scoreSize, "Consolas", "black", posScore, 40, "text");
     myGameArea.start();
 }
 
 var myGameArea = {
     canvas : document.createElement("canvas"),
     ready:function(){
-        this.canvas.width = 480;
-        this.canvas.height = 480;
+        this.canvas.width = size;
+        this.canvas.height = size;
         this.context = this.canvas.getContext("2d");
         this.canvas.id="main-board";
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
@@ -102,8 +129,7 @@ function component(width, height, color, x, y, type) {
     this.crashBorder = function(){
         var mytop = this.y;
         var mybottom = this.y + (this.height);
-        console.log(mytop+"-"+mybottom);
-        if(mybottom==480||mytop<0){
+        if(mybottom==size||mytop<0){
             return true;
         }
         return false;
@@ -134,16 +160,16 @@ function updateGameArea() {
         maxGap = minGap + 50;
         gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
         if(myGameArea.frameNo<4000){
-            myObstacles.push(new component(10, height, "green", x, 0));
-            myObstacles.push(new component(10, x - height - gap, "green", x, height + gap));
+            myObstacles.push(new component(comSize, height, "green", x, 0));
+            myObstacles.push(new component(comSize, x - height - gap, "green", x, height + gap));
         }
         else if(myGameArea.frameNo<7000){
-            myObstacles.push(new component(10, height, "orange", x, 0));
-            myObstacles.push(new component(10, x - height - gap, "orange", x, height + gap));
+            myObstacles.push(new component(comSize, height, "orange", x, 0));
+            myObstacles.push(new component(comSize, x - height - gap, "orange", x, height + gap));
         }
         else{
-            myObstacles.push(new component(10, height, "red", x, 0));
-            myObstacles.push(new component(10, x - height - gap, "red", x, height + gap));
+            myObstacles.push(new component(comSize, height, "red", x, 0));
+            myObstacles.push(new component(comSize, x - height - gap, "red", x, height + gap));
         }
     }
     for (i = 0; i < myObstacles.length; i += 1) {
@@ -179,8 +205,7 @@ function replay(){
 }
 </script>    
 <br>
+<button id="clickme" onmousedown="accelerate(-0.2)" onmouseup=" accelerate(0.05)"> Click Me</button>
 <button hidden id="replay" onclick="replay()">REPLAY</button>
-<p>Use the SPACE button to stay in the air</p>
-<p>How long can you stay alive?</p>
 </body>
 </html>
