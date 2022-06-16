@@ -203,9 +203,16 @@ function keyupHandler(evt){
 function replay(){
     location.reload();
 }
+var btn = document.getElementById("clickme");
+btn.addEventListener("touchstart",function(){
+    accelerate(-0.2);
+})
+btn.addEventListener("touchend",function(){
+    accelerate(0.05);
+})
 </script>    
 <br>
-<button id="clickme" onmousedown="accelerate(-0.2)" onmouseup=" accelerate(0.05)"> Click Me</button>
+<button id="clickme" onmousedown="accelerate(-0.2)" onmouseup=" accelerate(0.05)" "> Click Me</button>
 <button hidden id="replay" onclick="replay()">REPLAY</button>
 </body>
 </html>
